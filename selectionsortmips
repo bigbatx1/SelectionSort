@@ -1,0 +1,35 @@
+#for(i=0;i<n-1;i++)
+      la $s7,vetor
+      addi $a1,$zero,10 #tamanho do vetor
+      subi $a2,$a1,1
+      add $t0,$zero,$zero# i=0
+FOR2: beq  $t0,$a2,Outer
+      addu $t1,$zero,$t0 #menor=i
+#for(j=i+1,j<n;j++)
+      addi $t2,$t0,1 # j=i+1
+FOR3: beq  $t2,$a1,IF #j<n
+#if(v[j]<v[menor])
+      sll $t4,$t2,2
+      #addu $t4,$t4,$s7
+      lw  $t4,vetor($t4) # v[j]
+      sll $t3,$t1,2# i4
+      add $t9,$t3,$zero
+      #addu $t3,$t3,$s7
+
+      lw  $t3,vetor($t3) #v[menor]
+      slt $t5,$t4,$t3 # t5=1  if(v[j]<v[menor])
+      bne $t5,1,incr
+      addu $t1,$zero,$t2 #menor=j
+incr: addi $t2,$t2,1  #incrementa j
+      j FOR3
+# IF(i!=menor)
+IF:   beq $t0,$t1,FIM
+      sll $t7,$t0,2 # i4
+      lw $t6,vetor($t7)#troca=v[i]
+      lw $t8,vetor($t9)# carrega v[menor] em t8 t8=v[menor]
+      sw $t8,vetor($t7) # v[i]=v[menor] ordem diferente de lw
+      sw $t6,vetor($t9) #v[menor]=troca
+FIM:  addi $t0,$t0,1  #incrementa i
+      j FOR2
+      #lw $t6,vetor($t0)
+Outer:
